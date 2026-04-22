@@ -20,13 +20,45 @@ function getApiKey() {
 
 /**
  * Erkennt, ob Mock-Daten statt echter API-Aufrufe genutzt werden sollen.
- * Aktiv, wenn VITE_USE_MOCKS=true gesetzt ist ODER kein API-Key vorhanden ist.
+ * Aktiv, wenn VITE_USE_MOCKS=true gesetzt ist ODER kein API-Key vorhanden ist
+ * ODER zur Laufzeit (`enableRuntimeMocks`) aktiviert wurde, z. B. weil die
+ * API mit 402/429 oder 401/403 geantwortet hat.
  */
+let runtimeMocks = false;
+
 export function shouldUseMocks() {
+  if (runtimeMocks) return true;
   const flag = import.meta.env.VITE_USE_MOCKS;
   if (flag === "true" || flag === "1") return true;
   const key = import.meta.env.VITE_SPOONACULAR_KEY;
   return !key || typeof key !== "string" || key.trim() === "";
+}
+
+/**
+ * Aktiviert für den Rest der Session den Mock-Fallback. Emittiert ein
+ * `flavorfind:mocks-enabled` Event, damit UI-Komponenten ein Banner zeigen
+ * können.
+ */
+export function enableRuntimeMocks(reason = "quota") {
+  if (runtimeMocks) return;
+  runtimeMocks = true;
+  if (typeof window !== "undefined") {
+    try {
+      window.dispatchEvent(
+        new CustomEvent("flavorfind:mocks-enabled", { detail: { reason } }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }
+  // eslint-disable-next-line no-console
+  console.info(
+    `[FlavorFind] API-Fallback aktiv (${reason}) — weitere Aufrufe nutzen Demo-Daten.`,
+  );
+}
+
+export function isRuntimeMocksEnabled() {
+  return runtimeMocks;
 }
 
 function buildUrl(path, params = {}) {
