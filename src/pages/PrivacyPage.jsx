@@ -22,10 +22,23 @@ export default function PrivacyPage() {
           <h2 className="font-serif text-2xl text-text">
             2. Verantwortlicher
           </h2>
-          <p className="leading-relaxed">
-            Verantwortlich im Sinne der DSGVO ist Youssef Dawod. Kontaktdaten
-            siehe Impressum.
-          </p>
+          <address className="not-italic leading-relaxed">
+            Youssef Dawod
+            <br />
+            Bahnhofstr. 1
+            <br />
+            29614 Soltau
+            <br />
+            Deutschland
+            <br />
+            E-Mail:{" "}
+            <a
+              href="mailto:dawod@yellowdeveloper.de"
+              className="text-accent hover:underline"
+            >
+              dawod@yellowdeveloper.de
+            </a>
+          </address>
         </section>
 
         <section>

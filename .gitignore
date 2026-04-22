@@ -29,3 +29,6 @@ coverage
 
 # Umgebungsvariablen
 .env
+
+# Interne Dokumentation (nicht im Repository, nur lokal)
+docs/

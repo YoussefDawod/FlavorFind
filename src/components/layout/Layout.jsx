@@ -9,6 +9,7 @@ import DemoModeBanner from "./DemoModeBanner";
 import OfflineBanner from "./OfflineBanner";
 import InstallPrompt from "./InstallPrompt";
 import PwaUpdatePrompt from "./PwaUpdatePrompt";
+import ScrollHintBanner from "./ScrollHintBanner";
 import ErrorBoundary from "../feedback/ErrorBoundary";
 import { EASINGS, PAGE_TRANSITION_DURATION } from "../../utils/constants";
 
@@ -65,6 +66,7 @@ export default function Layout() {
 
         <InstallPrompt />
         <PwaUpdatePrompt />
+        <ScrollHintBanner />
       </div>
     </MotionConfig>
   );
