@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Button from "../components/ui/Button";
 import Badge from "../components/ui/Badge";
+import Stepper from "../components/ui/Stepper";
 import { Skeleton } from "../components/feedback/Skeleton";
 import { ErrorState } from "../components/feedback/ErrorState";
 import FavoriteButton from "../components/recipe/FavoriteButton";
@@ -19,7 +20,12 @@ import RecipeGrid from "../components/recipe/RecipeGrid";
 import { useRecipeDetail, useSimilarRecipes } from "../hooks/useRecipes";
 import { useToast } from "../hooks/useToast";
 import { parseIdFromSlug, toSlugId } from "../utils/slug";
-import { formatAmount, formatMinutes, stripHtml } from "../utils/formatters";
+import {
+  formatAmount,
+  formatMinutes,
+  scaleAmount,
+  stripHtml,
+} from "../utils/formatters";
 import { ROUTES } from "../utils/routes";
 
 export default function RecipeDetailPage() {
@@ -37,11 +43,19 @@ export default function RecipeDetailPage() {
   } = useRecipeDetail(id);
   const { data: similar = [] } = useSimilarRecipes(id, { number: 4 });
 
+  const [servings, setServings] = useState(null);
+
   useEffect(() => {
     if (recipe?.title) {
       document.title = `${recipe.title} – FlavorFind`;
     }
   }, [recipe?.title]);
+
+  useEffect(() => {
+    if (Number.isFinite(recipe?.servings) && servings === null) {
+      setServings(recipe.servings);
+    }
+  }, [recipe?.servings, servings]);
 
   if (!id) {
     return (
@@ -66,6 +80,10 @@ export default function RecipeDetailPage() {
 
   const summary = recipe.summary ? stripHtml(recipe.summary) : "";
   const ingredients = recipe.extendedIngredients ?? [];
+  const originalServings = Number.isFinite(recipe.servings)
+    ? recipe.servings
+    : 1;
+  const currentServings = servings ?? originalServings;
   const steps = recipe.analyzedInstructions?.[0]?.steps ?? [];
   const badges = [
     recipe.vegetarian && { label: "Vegetarisch", icon: Leaf },
@@ -191,25 +209,44 @@ export default function RecipeDetailPage() {
 
       <section className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.3fr]">
         <aside>
-          <h2 className="font-serif text-2xl text-text">Zutaten</h2>
-          <p className="mt-1 text-xs uppercase tracking-widest text-text-muted">
-            Für {recipe.servings ?? "—"} Portion
-            {recipe.servings === 1 ? "" : "en"}
-          </p>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="font-serif text-2xl text-text">Zutaten</h2>
+              <p className="mt-1 text-xs uppercase tracking-widest text-text-muted">
+                Für {currentServings} Portion{currentServings === 1 ? "" : "en"}
+              </p>
+            </div>
+            <Stepper
+              value={currentServings}
+              onChange={setServings}
+              min={1}
+              max={24}
+              label="Portionen"
+              suffix={currentServings === 1 ? "Port." : "Port."}
+              size="sm"
+            />
+          </div>
           <ul className="mt-5 space-y-2">
-            {ingredients.map((ing, i) => (
-              <li
-                key={`${ing.id ?? ing.name}-${i}`}
-                className="flex items-baseline justify-between gap-4 border-b border-border py-2 text-sm"
-              >
-                <span className="text-text">{ing.name}</span>
-                <span className="font-mono text-text-secondary">
-                  {Number.isFinite(ing.amount) && ing.amount > 0
-                    ? `${formatAmount(ing.amount)} ${ing.unit ?? ""}`.trim()
-                    : (ing.original ?? "")}
-                </span>
-              </li>
-            ))}
+            {ingredients.map((ing, i) => {
+              const scaled = scaleAmount(
+                ing.amount,
+                originalServings,
+                currentServings,
+              );
+              return (
+                <li
+                  key={`${ing.id ?? ing.name}-${i}`}
+                  className="flex items-baseline justify-between gap-4 border-b border-border py-2 text-sm"
+                >
+                  <span className="text-text">{ing.name}</span>
+                  <span className="font-mono text-text-secondary">
+                    {Number.isFinite(scaled) && scaled > 0
+                      ? `${formatAmount(scaled)} ${ing.unit ?? ""}`.trim()
+                      : (ing.original ?? "")}
+                  </span>
+                </li>
+              );
+            })}
             {ingredients.length === 0 ? (
               <li className="text-sm text-text-muted">
                 Keine Zutatenliste verfügbar.
