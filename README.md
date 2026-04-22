@@ -144,9 +144,9 @@ Läuft auf Push zu `main` und in jedem Pull-Request.
 
 ## ☁️ Deployment
 
-FlavorFind deployt auf **Render.com** als Static Site — siehe [**DEPLOY.md**](./DEPLOY.md) für die vollständige Anleitung inkl. Blueprint, Security-Headern und Custom-Domain.
+FlavorFind deployt auf **Render.com** als Static Site. Die vollständige Deploy-Anleitung (Blueprint, Security-Header, Custom Domain, Smoke-Tests) liegt lokal unter `docs/DEPLOY.md` (nicht versioniert).
 
-One-Click:
+Kurzform — One-Click via Blueprint:
 
 ```
 https://render.com/deploy?repo=https://github.com/YoussefDawod/FlavorFind

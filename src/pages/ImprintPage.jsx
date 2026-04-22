@@ -13,9 +13,9 @@ export default function ImprintPage() {
           <address className="not-italic leading-relaxed">
             Youssef Dawod
             <br />
-            Musterstraße 1
+            Bahnhofstr. 1
             <br />
-            12345 Musterstadt
+            29614 Soltau
             <br />
             Deutschland
           </address>
@@ -26,10 +26,10 @@ export default function ImprintPage() {
           <p className="leading-relaxed">
             E-Mail:{" "}
             <a
-              href="mailto:kontakt@flavorfind.example"
+              href="mailto:dawod@yellowdeveloper.de"
               className="text-accent hover:underline"
             >
-              kontakt@flavorfind.example
+              dawod@yellowdeveloper.de
             </a>
           </p>
         </section>

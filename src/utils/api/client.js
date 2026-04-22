@@ -51,7 +51,6 @@ export function enableRuntimeMocks(reason = "quota") {
       /* ignore */
     }
   }
-  // eslint-disable-next-line no-console
   console.info(
     `[FlavorFind] API-Fallback aktiv (${reason}) — weitere Aufrufe nutzen Demo-Daten.`,
   );
