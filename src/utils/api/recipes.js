@@ -1,4 +1,5 @@
-import { apiGet, shouldUseMocks } from "./client";
+import { apiGet, enableRuntimeMocks, shouldUseMocks } from "./client";
+import { QuotaExceededError, ApiError } from "./errors";
 import {
   mockFindByIngredients,
   mockRandomRecipes,
@@ -11,6 +12,25 @@ const DEFAULT_RANDOM_NUMBER = 8;
 const DEFAULT_SEARCH_NUMBER = 12;
 
 /**
+ * Wrapper: schaltet bei Quota-/Auth-Fehlern auf Mocks um und ruft den
+ * entsprechenden Mock-Generator als Fallback auf.
+ */
+async function withMockFallback(apiCall, mockFn) {
+  try {
+    return await apiCall();
+  } catch (err) {
+    const isQuota = err instanceof QuotaExceededError;
+    const isAuth =
+      err instanceof ApiError && (err.status === 401 || err.status === 403);
+    if (isQuota || isAuth) {
+      enableRuntimeMocks(isQuota ? "quota" : "unauthorized");
+      return mockFn();
+    }
+    throw err;
+  }
+}
+
+/**
  * Zufällige Rezepte für die Startseite.
  */
 export async function getRandomRecipes(
@@ -18,12 +38,17 @@ export async function getRandomRecipes(
   options = {},
 ) {
   if (shouldUseMocks()) return mockRandomRecipes({ number, tags });
-  const data = await apiGet(
-    "/recipes/random",
-    { number, tags: tags?.length ? tags.join(",") : undefined },
-    options,
+  return withMockFallback(
+    async () => {
+      const data = await apiGet(
+        "/recipes/random",
+        { number, tags: tags?.length ? tags.join(",") : undefined },
+        options,
+      );
+      return data?.recipes ?? [];
+    },
+    () => mockRandomRecipes({ number, tags }),
   );
-  return data?.recipes ?? [];
 }
 
 /**
@@ -46,30 +71,35 @@ export async function searchRecipes(
   if (shouldUseMocks()) {
     return mockRecipeSearch({ query, cuisine, diet, number, offset });
   }
-  const data = await apiGet(
-    "/recipes/complexSearch",
-    {
-      query,
-      cuisine,
-      diet,
-      intolerances,
-      type,
-      maxReadyTime,
-      number,
-      offset,
-      sort,
-      addRecipeInformation: true,
-      fillIngredients: true,
-      instructionsRequired: true,
+  return withMockFallback(
+    async () => {
+      const data = await apiGet(
+        "/recipes/complexSearch",
+        {
+          query,
+          cuisine,
+          diet,
+          intolerances,
+          type,
+          maxReadyTime,
+          number,
+          offset,
+          sort,
+          addRecipeInformation: true,
+          fillIngredients: true,
+          instructionsRequired: true,
+        },
+        options,
+      );
+      return {
+        results: data?.results ?? [],
+        totalResults: data?.totalResults ?? 0,
+        offset: data?.offset ?? offset,
+        number: data?.number ?? number,
+      };
     },
-    options,
+    () => mockRecipeSearch({ query, cuisine, diet, number, offset }),
   );
-  return {
-    results: data?.results ?? [],
-    totalResults: data?.totalResults ?? 0,
-    offset: data?.offset ?? offset,
-    number: data?.number ?? number,
-  };
 }
 
 /**
@@ -77,10 +107,14 @@ export async function searchRecipes(
  */
 export async function getRecipeById(id, options = {}) {
   if (shouldUseMocks()) return mockRecipeDetail(id);
-  return apiGet(
-    `/recipes/${encodeURIComponent(id)}/information`,
-    { includeNutrition: true },
-    options,
+  return withMockFallback(
+    () =>
+      apiGet(
+        `/recipes/${encodeURIComponent(id)}/information`,
+        { includeNutrition: true },
+        options,
+      ),
+    () => mockRecipeDetail(id),
   );
 }
 
@@ -98,17 +132,22 @@ export async function findRecipesByIngredients(
 ) {
   if (!ingredients || ingredients.length === 0) return [];
   if (shouldUseMocks()) return mockFindByIngredients({ ingredients, number });
-  const data = await apiGet(
-    "/recipes/findByIngredients",
-    {
-      ingredients: ingredients.join(","),
-      number,
-      ranking,
-      ignorePantry,
+  return withMockFallback(
+    async () => {
+      const data = await apiGet(
+        "/recipes/findByIngredients",
+        {
+          ingredients: ingredients.join(","),
+          number,
+          ranking,
+          ignorePantry,
+        },
+        options,
+      );
+      return Array.isArray(data) ? data : [];
     },
-    options,
+    () => mockFindByIngredients({ ingredients, number }),
   );
-  return Array.isArray(data) ? data : [];
 }
 
 /**
@@ -116,10 +155,15 @@ export async function findRecipesByIngredients(
  */
 export async function getSimilarRecipes(id, { number = 4 } = {}, options = {}) {
   if (shouldUseMocks()) return mockSimilar(id, { number });
-  const data = await apiGet(
-    `/recipes/${encodeURIComponent(id)}/similar`,
-    { number },
-    options,
+  return withMockFallback(
+    async () => {
+      const data = await apiGet(
+        `/recipes/${encodeURIComponent(id)}/similar`,
+        { number },
+        options,
+      );
+      return Array.isArray(data) ? data : [];
+    },
+    () => mockSimilar(id, { number }),
   );
-  return Array.isArray(data) ? data : [];
 }

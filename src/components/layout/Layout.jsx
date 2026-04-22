@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import SkipLink from "./SkipLink";
 import GrainOverlay from "./GrainOverlay";
 import AmbientGlow from "./AmbientGlow";
+import DemoModeBanner from "./DemoModeBanner";
 import { EASINGS, PAGE_TRANSITION_DURATION } from "../../utils/constants";
 
 /**
@@ -30,6 +31,7 @@ export default function Layout() {
       <GrainOverlay />
 
       <div className="relative z-10 flex min-h-dvh flex-col">
+        <DemoModeBanner />
         <Header />
 
         <AnimatePresence mode="wait">
