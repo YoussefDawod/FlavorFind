@@ -1,83 +1,34 @@
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import WelcomeMessage from './WelcomeMessage';
-import { fetchRecipes, fetchRecipeDetails } from './api';
-
-const RecipeApp = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [query, setQuery] = useState('');
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
-
-  const handleFetchRecipes = async () => {
-    try {
-      const meals = await fetchRecipes(query);
-      setRecipes(meals);
-    } catch (error) {
-      console.error('Fehler beim Abrufen der Rezepte:', error);
-    }
-  };
-
-  const handleRecipeClick = async (recipeId) => {
-    try {
-      const recipe = await fetchRecipeDetails(recipeId);
-      setSelectedRecipe(recipe);
-    } catch (error) {
-      console.error('Fehler beim Abrufen der Rezeptdetails:', error);
-    }
-  };
-
+export default function App() {
   return (
-    <div className="app">
-      <WelcomeMessage />
-      <header>
-        <h1>Rezept Suche</h1>
-      </header>
-      <main>
-        <input
-          type="text"
-          id="recipe-search"
-          name="recipe-search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Gib ein Rezept in English ein"
-        />
-        <button onClick={handleFetchRecipes}>Suchen</button>
-        <ul className="ul-list">
-          {recipes && recipes.map(recipe => (
-            <li className="li-list" key={recipe.idMeal} onClick={() => handleRecipeClick(recipe.idMeal)}>
-              {recipe.strMeal}
-            </li>
-          ))}
-        </ul>
-        {selectedRecipe && (
-          <div className="container">
-            <div className="selected-recipe">
-              <div className='recipe-details'>
-              <h2>{selectedRecipe.strMeal}</h2>
-              <p>{selectedRecipe.strInstructions}</p>
-              </div>
-              <img src={selectedRecipe.strMealThumb} alt={selectedRecipe.strMeal} />
-            </div>
-          </div>
-        )}
-      </main>
-      <footer>
-        <p>created by Yousef ®</p>
-        <div className="social-icons">
-          <a href="https://www.instagram.com/youssef0d/" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faInstagram} />
-          </a>
-          <a href="https://github.com/YoussefDawod" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faGithub} />
-          </a>
-          <a href="https://www.linkedin.com/in/youssef-dawod-203273215/" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faLinkedin} />
-          </a>
-        </div>
-      </footer>
-    </div>
+    <main className="relative min-h-dvh flex items-center justify-center px-6">
+      <div className="max-w-2xl text-center space-y-6">
+        <p
+          className="text-sm uppercase tracking-[0.3em] text-[var(--color-accent)]"
+          style={{ fontFamily: "var(--font-sans)" }}
+        >
+          FlavorFind
+        </p>
+        <h1
+          className="font-[600]"
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "var(--text-display)",
+            lineHeight: 1.05,
+          }}
+        >
+          Cook like it <em className="italic">matters.</em>
+        </h1>
+        <p className="text-lg" style={{ color: "var(--color-text-secondary)" }}>
+          Entdecke Rezepte cineastisch, koche mit geführtem Modus, plane deine
+          Woche.
+        </p>
+        <p
+          className="text-xs mt-12"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          Phase 0 · Setup erfolgreich · Dark Theme · Fraunces geladen
+        </p>
+      </div>
+    </main>
   );
-};
-
-export default RecipeApp;
+}
