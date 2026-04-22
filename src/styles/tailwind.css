@@ -11,28 +11,28 @@
   --font-sans: "Inter", system-ui, -apple-system, Segoe UI, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* ---------- Colors (Dark Default) ---------- */
-  --color-bg: #0f0a08;
-  --color-surface: #1a1311;
-  --color-surface-elevated: #251b18;
-  --color-overlay: rgba(15, 10, 8, 0.72);
+  /* ---------- Colors (Dark Default — OLED True Black) ---------- */
+  --color-bg: #000000;
+  --color-surface: #0b0b0c;
+  --color-surface-elevated: #15151a;
+  --color-overlay: rgba(0, 0, 0, 0.78);
 
   --color-text: #f5efe6;
   --color-text-secondary: #c7b8a8;
-  --color-text-muted: #8a7c6f;
+  --color-text-muted: #7a7266;
 
   --color-accent: #d4a574;
   --color-accent-hover: #e4b885;
-  --color-accent-soft: rgba(212, 165, 116, 0.12);
+  --color-accent-soft: rgba(212, 165, 116, 0.14);
   --color-secondary: #c2410c;
-  --color-secondary-soft: rgba(194, 65, 12, 0.15);
+  --color-secondary-soft: rgba(194, 65, 12, 0.18);
 
   --color-success: #84a98c;
   --color-danger: #bc4b51;
   --color-warning: #e4a76e;
 
-  --color-border: rgba(245, 239, 230, 0.08);
-  --color-border-strong: rgba(245, 239, 230, 0.16);
+  --color-border: rgba(245, 239, 230, 0.07);
+  --color-border-strong: rgba(245, 239, 230, 0.18);
 
   /* ---------- Radii ---------- */
   --radius-sm: 0.5rem;
@@ -41,15 +41,15 @@
   --radius-xl: 1.75rem;
   --radius-2xl: 2.5rem;
 
-  /* ---------- Shadows (warm) ---------- */
-  --shadow-sm: 0 1px 2px rgba(15, 10, 8, 0.3);
-  --shadow-md: 0 4px 12px rgba(15, 10, 8, 0.4), 0 2px 4px rgba(15, 10, 8, 0.25);
+  /* ---------- Shadows (OLED — deeper blacks) ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5);
   --shadow-lg:
-    0 16px 40px rgba(15, 10, 8, 0.5), 0 6px 12px rgba(15, 10, 8, 0.3);
+    0 16px 40px rgba(0, 0, 0, 0.75), 0 6px 12px rgba(0, 0, 0, 0.55);
   --shadow-soft:
-    0 8px 24px rgba(15, 10, 8, 0.35), 0 2px 6px rgba(15, 10, 8, 0.2);
-  --shadow-glow: 0 0 32px rgba(212, 165, 116, 0.25);
-  --shadow-inset: inset 0 1px 0 rgba(245, 239, 230, 0.04);
+    0 8px 24px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 32px rgba(212, 165, 116, 0.32);
+  --shadow-inset: inset 0 1px 0 rgba(245, 239, 230, 0.05);
 
   /* ---------- Typography scale ---------- */
   --text-display: clamp(2.5rem, 6vw + 1rem, 5.5rem);

@@ -52,7 +52,7 @@ export function ThemeProvider({ children }) {
       }
       generic.setAttribute(
         "content",
-        theme === THEMES.dark ? "#0F0A08" : "#FAF5EC",
+        theme === THEMES.dark ? "#000000" : "#FAF5EC",
       );
     }
 
