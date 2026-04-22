@@ -1,7 +1,16 @@
 import { cva } from "class-variance-authority";
-import { forwardRef } from "react";
+import { forwardRef, isValidElement, createElement } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "../../utils/cn";
+
+function renderIcon(icon) {
+  if (icon == null) return null;
+  if (isValidElement(icon)) return icon;
+  if (typeof icon === "function" || (typeof icon === "object" && icon.$$typeof)) {
+    return createElement(icon, { className: "size-4", "aria-hidden": "true" });
+  }
+  return icon;
+}
 
 export const buttonVariants = cva(
   "relative inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50",
@@ -67,13 +76,13 @@ const Button = forwardRef(function Button(
         <Loader2 className="size-4 animate-spin" aria-hidden="true" />
       ) : leftIcon ? (
         <span className="inline-flex size-4 items-center justify-center" aria-hidden="true">
-          {leftIcon}
+          {renderIcon(leftIcon)}
         </span>
       ) : null}
       {children}
       {!isLoading && rightIcon ? (
         <span className="inline-flex size-4 items-center justify-center" aria-hidden="true">
-          {rightIcon}
+          {renderIcon(rightIcon)}
         </span>
       ) : null}
     </button>
