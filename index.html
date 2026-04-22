@@ -10,6 +10,8 @@
       name="description"
       content="FlavorFind — Entdecke Rezepte cineastisch, koche mit geführtem Modus, plane deine Woche."
     />
+    <meta name="author" content="Youssef Dawod" />
+    <link rel="canonical" href="https://flavorfind.yellowdeveloper.de/" />
     <meta
       name="theme-color"
       content="#000000"
@@ -49,6 +51,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 
+    <!-- OpenSearch (Chrome Tab-to-Search) -->
+    <link
+      rel="search"
+      type="application/opensearchdescription+xml"
+      title="FlavorFind"
+      href="/opensearch.xml"
+    />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -81,6 +91,34 @@
     </script>
   </head>
   <body>
+    <noscript>
+      <div
+        style="
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          background: #000;
+          color: #faf5ec;
+          font-family: system-ui, sans-serif;
+          text-align: center;
+          z-index: 9999;
+        "
+      >
+        <div style="max-width: 32rem">
+          <h1 style="font-size: 1.5rem; margin-bottom: 1rem; color: #d4a574">
+            FlavorFind benötigt JavaScript
+          </h1>
+          <p style="line-height: 1.6; opacity: 0.8">
+            Diese App ist eine interaktive Single-Page-Anwendung. Bitte
+            aktiviere JavaScript in deinem Browser, um Rezepte zu entdecken, zu
+            suchen und zu kochen.
+          </p>
+        </div>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

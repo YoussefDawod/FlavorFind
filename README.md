@@ -172,7 +172,9 @@ https://render.com/deploy?repo=https://github.com/YoussefDawod/FlavorFind
 - Rezeptdaten: [Spoonacular API](https://spoonacular.com/food-api) — Rezepte bleiben Eigentum von Spoonacular, die App zeigt sie unverändert mit Quellenangabe.
 - Icons: [Lucide](https://lucide.dev) (ISC).
 - Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces) + [Inter](https://fonts.google.com/specimen/Inter) (SIL OFL).
-- Code: eigene Arbeit, MIT-Lizenz.
+- Code: eigene Arbeit, MIT-Lizenz — siehe [LICENSE](./LICENSE).
+
+Änderungsverlauf: [CHANGELOG.md](./CHANGELOG.md) · Mitwirken: [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ---
 

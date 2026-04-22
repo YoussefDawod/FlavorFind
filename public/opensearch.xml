@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>FlavorFind</ShortName>
+  <Description>Rezepte auf FlavorFind suchen</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="32" height="32" type="image/png">https://flavorfind.yellowdeveloper.de/icons/icon-192.png</Image>
+  <Url type="text/html" method="get" template="https://flavorfind.yellowdeveloper.de/suche?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://flavorfind.yellowdeveloper.de/opensearch.xml"/>
+  <moz:SearchForm>https://flavorfind.yellowdeveloper.de/suche</moz:SearchForm>
+</OpenSearchDescription>
