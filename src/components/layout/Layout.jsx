@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import Header from "./Header";
 import Footer from "./Footer";
 import SkipLink from "./SkipLink";
@@ -9,6 +9,7 @@ import DemoModeBanner from "./DemoModeBanner";
 import OfflineBanner from "./OfflineBanner";
 import InstallPrompt from "./InstallPrompt";
 import PwaUpdatePrompt from "./PwaUpdatePrompt";
+import ErrorBoundary from "../feedback/ErrorBoundary";
 import { EASINGS, PAGE_TRANSITION_DURATION } from "../../utils/constants";
 
 /**
@@ -28,39 +29,43 @@ export default function Layout() {
   const location = useLocation();
 
   return (
-    <div className="relative min-h-dvh">
-      <SkipLink />
-      <AmbientGlow />
-      <GrainOverlay />
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-dvh">
+        <SkipLink />
+        <AmbientGlow />
+        <GrainOverlay />
 
-      <div className="relative z-10 flex min-h-dvh flex-col">
-        <OfflineBanner />
-        <DemoModeBanner />
-        <Header />
+        <div className="relative z-10 flex min-h-dvh flex-col">
+          <OfflineBanner />
+          <DemoModeBanner />
+          <Header />
 
-        <AnimatePresence mode="wait">
-          <motion.main
-            key={location.pathname}
-            id="main-content"
-            tabIndex={-1}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{
-              duration: PAGE_TRANSITION_DURATION,
-              ease: EASINGS.outExpo,
-            }}
-            className="flex-1 focus:outline-none"
-          >
-            <Outlet />
-          </motion.main>
-        </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <motion.main
+              key={location.pathname}
+              id="main-content"
+              tabIndex={-1}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{
+                duration: PAGE_TRANSITION_DURATION,
+                ease: EASINGS.outExpo,
+              }}
+              className="flex-1 focus:outline-none"
+            >
+              <ErrorBoundary>
+                <Outlet />
+              </ErrorBoundary>
+            </motion.main>
+          </AnimatePresence>
 
-        <Footer />
+          <Footer />
+        </div>
+
+        <InstallPrompt />
+        <PwaUpdatePrompt />
       </div>
-
-      <InstallPrompt />
-      <PwaUpdatePrompt />
-    </div>
+    </MotionConfig>
   );
 }

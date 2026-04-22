@@ -13,6 +13,7 @@ export default defineConfig({
       includeAssets: [
         "favicon.svg",
         "icons/apple-touch-icon.png",
+        "og-image.jpg",
       ],
       manifest: {
         name: "FlavorFind — Cook like it matters.",
