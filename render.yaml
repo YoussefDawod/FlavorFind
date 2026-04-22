@@ -1,0 +1,75 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploy mit: https://render.com/deploy?repo=https://github.com/YoussefDawod/FlavorFind
+services:
+  - type: web
+    name: flavorfind
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    autoDeploy: true
+    branch: main
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Spoonacular-Key als Secret im Render-Dashboard setzen
+      - key: VITE_SPOONACULAR_KEY
+        sync: false
+      - key: VITE_USE_MOCKS
+        value: "false"
+
+    # SPA-Fallback: alle Routen auf index.html
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    headers:
+      # Caching — Vite-Hash-Assets sind langlebig (1 Jahr immutable)
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /icons/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /sw.js
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /manifest.webmanifest
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+
+      # Security-Header (alle Pfade)
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains; preload
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=(), interest-cohort=()
+      - path: /*
+        name: Cross-Origin-Opener-Policy
+        value: same-origin
+      # Moderate CSP — erlaubt Spoonacular-Bilder/-API und Google Fonts
+      - path: /*
+        name: Content-Security-Policy
+        value: >-
+          default-src 'self';
+          script-src 'self' 'unsafe-inline';
+          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+          font-src 'self' https://fonts.gstatic.com data:;
+          img-src 'self' data: blob: https://img.spoonacular.com https://spoonacular.com;
+          connect-src 'self' https://api.spoonacular.com;
+          manifest-src 'self';
+          worker-src 'self';
+          frame-ancestors 'none';
+          base-uri 'self';
+          form-action 'self'
