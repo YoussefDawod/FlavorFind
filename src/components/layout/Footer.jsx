@@ -1,14 +1,9 @@
 import { Link } from "react-router-dom";
-import { Github, Instagram, Linkedin } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 import { LEGAL_NAV, PRIMARY_NAV } from "../../utils/routes";
 import BrandMark from "./BrandMark";
 
 const SOCIAL_LINKS = [
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/youssef0d/",
-    Icon: Instagram,
-  },
   {
     label: "GitHub",
     href: "https://github.com/YoussefDawod",
