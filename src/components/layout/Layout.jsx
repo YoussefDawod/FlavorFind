@@ -6,6 +6,9 @@ import SkipLink from "./SkipLink";
 import GrainOverlay from "./GrainOverlay";
 import AmbientGlow from "./AmbientGlow";
 import DemoModeBanner from "./DemoModeBanner";
+import OfflineBanner from "./OfflineBanner";
+import InstallPrompt from "./InstallPrompt";
+import PwaUpdatePrompt from "./PwaUpdatePrompt";
 import { EASINGS, PAGE_TRANSITION_DURATION } from "../../utils/constants";
 
 /**
@@ -31,6 +34,7 @@ export default function Layout() {
       <GrainOverlay />
 
       <div className="relative z-10 flex min-h-dvh flex-col">
+        <OfflineBanner />
         <DemoModeBanner />
         <Header />
 
@@ -54,6 +58,9 @@ export default function Layout() {
 
         <Footer />
       </div>
+
+      <InstallPrompt />
+      <PwaUpdatePrompt />
     </div>
   );
 }
